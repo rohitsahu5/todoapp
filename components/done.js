@@ -14,6 +14,7 @@ export class Done extends React.Component {
     
   }
   renderAll = () => {
+    this.setState({alll:(<Text style={{alignSelf:"center",margin:65}}>Loading Please Wait..</Text>)})
     var Allrender = []
     var i = 1;
     db.collection("tasks").get().then(data => {

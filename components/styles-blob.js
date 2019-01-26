@@ -29,6 +29,7 @@ export default StyleSheet.create({
 
     blobActionDown: {
         margin:10,
+        marginBottom:100,
         justifyContent:"center",
         alignContent:"center",
         backgroundColor: "#f0bdff",

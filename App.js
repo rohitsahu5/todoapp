@@ -12,13 +12,7 @@ export default class App extends Component {
     )
   }
 }
-// class Root extends React.Component{
-//   render(){
-//     return(
-//       <Text>Rohit</Text>
-//     )
-//   }
-// }
+
 const Nn = createSwitchNavigator({
   Home:  Root ,
   Done:Done,

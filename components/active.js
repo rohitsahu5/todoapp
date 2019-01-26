@@ -11,14 +11,12 @@ export class Active extends React.Component {
     this.state = {
       alll: [],
     }
-    this.titleref = React.createRef()
-    this.discref = React.createRef()
-    
   }
   static navigationOptions = {
     title: 'Active ',
   };
   renderAll = () => {
+    this.setState({alll:(<Text style={{alignSelf:"center",margin:65}}>Loading Please Wait..</Text>)})
     var Allrender = []
     var i = 1;
     db.collection("tasks").get().then(data => {
@@ -32,6 +30,8 @@ export class Active extends React.Component {
         i++
       })
       this.setState({ alll: Allrender })
+    }).catch((err)=>{
+      this.setState({alll:(<Text style={{alignSelf:"center",margin:65,Color:"Red"}}>Connection Error</Text>)})
     })
 
   }

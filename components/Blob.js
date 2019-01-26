@@ -6,6 +6,8 @@ export class Blob extends React.Component {
     constructor(props) {
         super()
         this.state = {
+            valid:true,
+            sending:false,
             title:props.title,
             disc:props.disc,
             data: {
@@ -18,7 +20,7 @@ export class Blob extends React.Component {
         }
       
     }
-    getfreshcopy() {
+    getfreshcopy=()=> {
         db.collection("tasks").doc((this.state.data.no + 0).toString()).get().then(doc => {
             this.setState({
                 data: {
@@ -38,35 +40,67 @@ export class Blob extends React.Component {
         
       }
     Marktaskdone() {
+        this.setState({sending:true,valid:true})
+
         db.collection("tasks").doc((this.state.data.no + 0).toString()).set({
             status: "done"
         }, { merge: true }).then(a => {
             this.getfreshcopy()
             this.setState({
-                edit: false
+                edit: false,
+                sending:false
             })
+  
+        
+        }).catch(err=>{
+            
+        
         })
     }
     Savetask() {
+        this.setState({sending:true,valid:true})
+
        var newdisc=this.state.title
        var newtitle= this.state.disc
+
+       if(this.state.title == "" || this.state.disc){
+           this.setState({valid:false})
+           return null
+       }
         db.collection("tasks").doc((this.state.data.no + 0).toString()).set(
             { disc: newdisc, title: newtitle }, { merge: true }
         ).then(a => {
             this.getfreshcopy()
             this.setState({
-                edit: false
+                edit: false,
+                sending:false
             })
+  
+
         })
+        .catch(()=>{
+       
+        }
+        )
 
     }
-
+    showError=()=>{
+        if(this.state.valid)
+        return(<Text style={{flex:1,alignSelf:"center",color:"red"}}>Enter Both Fields </Text>)
+    }
     render() {
+        var blobstyle ;
+        if (this.state.data.status === "active")
+        blobstyle={...styles.blob,...styles.blobActive}
+        else
+        blobstyle={...styles.blob,...styles.blobDone}
+
         var innerBlob
         if (this.state.edit === true) {
-            innerBlob = (<View >
-                <TextInput type="text" style={styles.blobText} placeholder="Type Todo title" value={this.state.data.title}></TextInput>
-                <TextInput multiline type="text" numberOfLines={2} style={styles.blobTextArea} value={this.state.data.disc} placeholder="Describe your Todo..."></TextInput>
+            innerBlob = (  <View style={blobstyle}><View >
+                <TextInput type="text" style={styles.blobText} placeholder="Type Todo title" defaultValue={this.state.data.title}></TextInput>
+                <TextInput multiline  type="text" numberOfLines={2} style={styles.blobTextArea} defaultValue={this.state.data.disc} placeholder="Describe your Todo..."></TextInput>
+                {this.showError()}
                 <View style={styles.blobBottom}>
                     <Text style={{...styles.one,...{borderRightWidth:1}}} onPress={A => {
                         this.setState({
@@ -76,7 +110,7 @@ export class Blob extends React.Component {
                     
                     <Text style={styles.one} onPress={() => this.Savetask()}>SAVE</Text>
                 </View>
-            </View>)
+            </View></View>)
         }
         else {
             var actions = <View></View>;
@@ -89,7 +123,7 @@ export class Blob extends React.Component {
                     }} >edit</Text></View>;
             }
 
-            innerBlob = (<View>
+            innerBlob = (  <View style={blobstyle}><View>
                 <View style={styles.blobHead}>
                     <Text style={styles.blobTitle}> {this.state.data.title} </Text>
                     {actions}
@@ -98,20 +132,24 @@ export class Blob extends React.Component {
 
                 <Text style={styles.blobDisc}>{this.state.data.disc}
                 </Text>
-                <Text style={styles.blobStatus}> STATUS : {this.state.data.status.toUpperCase()}</Text></View>)
+                <Text style={styles.blobStatus}> STATUS : {this.state.data.status.toUpperCase()}</Text></View></View>)
 
         }
-        var blobstyle ;
-        if (this.state.data.status === "active")
-        blobstyle={...styles.blob,...styles.blobActive}
-        else
-        blobstyle={...styles.blob,...styles.blobDone}
+        if (this.state.sending){
+            innerBlob=<View style={blobstyle}>
+                  
+            
+            <Text style={styles.blobInnerButton} >
+        Updating</Text>      
+          </View>
+          }
+    
         return (
-            <View style={blobstyle}>
-                <View style="blob-inner">
+          
+         <View>
                    
-                   {innerBlob}
-                        </View></View>
+                   {innerBlob}</View>
+                
         );
     }
 }
