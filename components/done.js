@@ -3,6 +3,7 @@ import { db } from "../firebase";
 import { View, ScrollView ,Text} from "react-native"
 import styles from "./Styles-header"
 import { Blob } from "./Blob"
+import {Header} from "./Header"
 
 
 export class Done extends React.Component {
@@ -37,12 +38,9 @@ export class Done extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View >
-        <View style={styles.header} >
-          <Text onTouchStart= {() => { navigate("All") }}  style={styles.tabs}>ALL</Text>
-          <Text onTouchStart= {() => { navigate("Done") }}  style={{ ...styles.tabs, ...styles.selected }}>DONE</Text>
-          <Text onTouchStart= {() => { navigate("Active") }}  style={styles.tabs}>ACTIVE</Text>
-        </View>
-  <ScrollView>
+        <Header selectedTab="Done"/>
+
+       <ScrollView>
         {this.state.alll}
         </ScrollView>       
       </View>

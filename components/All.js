@@ -4,6 +4,7 @@ import { Blob } from "./Blob"
 import { View ,Text,ScrollView,TextInput,ToastAndroid} from "react-native"
 import blobStyle from "./styles-blob"
 import headerStyle from "./Styles-header"
+import {Header} from "./Header"
 
 export class All extends React.Component {
   constructor() {
@@ -128,11 +129,8 @@ Sending</Text>
     return (
       <View>
         
-        <View style={styles.header} >
-      <Text onTouchStart= {() => { navigate("All") }} style={{ ...styles.tabs, ...styles.selected }}>ALL</Text>
-      <Text onTouchStart= {() => { navigate("Done") }} style={styles.tabs} >DONE</Text>
-      <Text onTouchStart= {() => { navigate("Active") }} style={styles.tabs}  >ACTIVE</Text>
-    </View>
+        <Header selectedTab="All"/>
+
     <ScrollView>
 
         {this.state.alll}

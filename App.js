@@ -3,22 +3,24 @@ import {Root} from "./components/Root"
 import {Done} from "./components/done"
 import {Active} from "./components/active"
 import {All} from "./components/All"
-import { createSwitchNavigator, createAppContainer } from "react-navigation"
+
+import { Router, Scene } from 'react-native-router-flux';
+
 
 export default class App extends Component {
   render() {
     return (
-    <Nna/>
+<Router  >
+  <Scene key="root" >
+  <Scene key="Root" hideNavBar="true" component={Root} initial />
+  <Scene key="All"  hideNavBar="true" component={All} title="All" />
+  <Scene key="Done" hideNavBar="true" component={Done} title="Done" />
+  <Scene key="Active" hideNavBar="true" component={Active} title="Active" />
+
+
+
+  </Scene>
+</Router>
     )
   }
 }
-
-const Nn = createSwitchNavigator({
-  Home:  Root ,
-  Done:Done,
-  Active:Active,
-  All:All
- 
-});
-
-const Nna = createAppContainer(Nn)
